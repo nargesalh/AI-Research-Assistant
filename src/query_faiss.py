@@ -43,12 +43,19 @@ db = FAISS.from_documents(
 question = "What is attention mechanism?"
 
 
-results = db.similarity_search(
+results = db.similarity_search_with_score(
     question,
     k=3
 )
 
 
-for i, doc in enumerate(results):
-    print("\n--- Result", i+1, "---")
+for i, (doc, score) in enumerate(results):
+
+    print(f"\n--- Result {i+1} ---")
+
+    print("Score:", score)
+
     print(doc.page_content[:500])
+
+    print("\nMetadata:")
+    print(doc.metadata)
