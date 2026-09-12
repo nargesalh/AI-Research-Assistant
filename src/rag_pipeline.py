@@ -1,35 +1,10 @@
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_ollama import OllamaLLM
 
 
 # -----------------------
-# 1. Load Document
-# -----------------------
-
-loader = PyPDFLoader(
-    "data/papers/attention.pdf"
-)
-
-documents = loader.load()
-
-
-# -----------------------
-# 2. Split Document
-# -----------------------
-
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1000,
-    chunk_overlap=200
-)
-
-chunks = splitter.split_documents(documents)
-
-
-# -----------------------
-# 3. Embedding
+# 1. Load Embedding Model
 # -----------------------
 
 embeddings = HuggingFaceEmbeddings(
@@ -38,21 +13,33 @@ embeddings = HuggingFaceEmbeddings(
 
 
 # -----------------------
-# 4. Vector Database
+# 2. Load FAISS Database
 # -----------------------
 
-db = FAISS.from_documents(
-    chunks,
-    embeddings
+db = FAISS.load_local(
+    "models/faiss_index",
+    embeddings,
+    allow_dangerous_deserialization=True
 )
 
 
+print("FAISS loaded successfully")
+
+
 # -----------------------
-# 5. Retriever
+# 3. User Question
 # -----------------------
 
-question = "Explain the role of Query, Key and Value in attention mechanism."
+question = """
+According to the paper, what is the exact BLEU score achieved
+on the English-to-French translation task?
+Return only the number.
+"""
 
+
+# -----------------------
+# 4. Retrieve Context
+# -----------------------
 
 docs = db.similarity_search(
     question,
@@ -66,7 +53,7 @@ context = "\n\n".join(
 
 
 # -----------------------
-# 6. LLM
+# 5. Local LLM
 # -----------------------
 
 llm = OllamaLLM(
@@ -75,7 +62,13 @@ llm = OllamaLLM(
 
 
 prompt = f"""
-Answer the question using only the context below.
+You are an AI research assistant.
+
+Answer the question using ONLY the provided context.
+If the answer is not available in the context, say:
+"I don't know based on the provided document."
+
+Be precise and include numbers exactly as they appear.
 
 Context:
 {context}
@@ -86,8 +79,10 @@ Question:
 Answer:
 """
 
-
+print("\n----- CONTEXT -----")
+print(context)
 response = llm.invoke(prompt)
 
 
+print("\nAnswer:")
 print(response)
