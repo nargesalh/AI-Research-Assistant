@@ -31,9 +31,7 @@ print("FAISS loaded successfully")
 # -----------------------
 
 question = """
-According to the paper, what is the exact BLEU score achieved
-on the English-to-French translation task?
-Return only the number.
+What datasets were used for evaluation?
 """
 
 
