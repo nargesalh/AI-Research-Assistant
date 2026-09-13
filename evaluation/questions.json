@@ -1,0 +1,33 @@
+[
+  {
+    "id":1,
+    "question":"Which machine translation tasks were used to evaluate the Transformer?",
+    "expected_keywords":[
+      "WMT",
+      "English-to-German",
+      "English-to-French"
+    ]
+  },
+
+  {
+    "id":2,
+    "question":"What is the main contribution of the paper?",
+    "expected_keywords":[
+      "Transformer",
+      "attention",
+      "recurrent",
+      "convolution"
+    ]
+  },
+
+  {
+    "id":3,
+    "question":"What are the main components used in multi-head attention?",
+    "expected_keywords":[
+      "query",
+      "key",
+      "value",
+      "head"
+    ]
+  }
+]
