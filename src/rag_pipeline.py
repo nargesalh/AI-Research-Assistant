@@ -39,15 +39,29 @@ What datasets were used for evaluation?
 # 4. Retrieve Context
 # -----------------------
 
-docs = db.similarity_search(
+docs = db.max_marginal_relevance_search(
     question,
-    k=3
+    k=8
 )
 
 
-context = "\n\n".join(
-    [doc.page_content for doc in docs]
-)
+context = ""
+
+for i, doc in enumerate(docs):
+
+    context += f"""
+--- Document Chunk {i+1} ---
+
+Source:
+{doc.metadata.get('source')}
+
+Page:
+{doc.metadata.get('page')}
+
+Content:
+{doc.page_content}
+
+"""
 
 
 # -----------------------
@@ -60,13 +74,17 @@ llm = OllamaLLM(
 
 
 prompt = f"""
-You are an AI research assistant.
-
 Answer the question using ONLY the provided context.
-If the answer is not available in the context, say:
+
+Rules:
+- Extract all relevant information from the context.
+- If the question asks for multiple items, return all items.
+- Do not return only one example.
+- Do not use outside knowledge.
+- If the answer is not available in the context, say:
 "I don't know based on the provided document."
 
-Be precise and include numbers exactly as they appear.
+Be concise and accurate.
 
 Context:
 {context}
