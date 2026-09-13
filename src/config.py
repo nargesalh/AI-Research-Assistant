@@ -1,0 +1,7 @@
+EMBEDDING_MODEL = "intfloat/e5-small-v2"
+
+CHUNK_SIZE = 1000
+
+CHUNK_OVERLAP = 200
+
+TOP_K = 5

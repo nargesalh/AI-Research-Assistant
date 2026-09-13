@@ -1,6 +1,7 @@
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_ollama import OllamaLLM
+from config import TOP_K
 
 
 # -----------------------
@@ -41,7 +42,7 @@ What datasets were used for evaluation?
 
 docs = db.max_marginal_relevance_search(
     question,
-    k=8
+    k=TOP_K
 )
 
 
