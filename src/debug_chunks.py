@@ -2,6 +2,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
+
 # -----------------------
 # 1. Load PDF
 # -----------------------
@@ -9,7 +10,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 file_path = "data/papers/attention.pdf"
 
 loader = PyPDFLoader(file_path)
-
+documents = loader.load()
 for doc in documents:
 
     abstract = doc.metadata.get("description-abstract")
