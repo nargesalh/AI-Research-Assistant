@@ -13,7 +13,7 @@ import json
 
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from src.config import EMBEDDING_MODEL
+from src.config import EMBEDDING_MODEL, TOP_K
 from langchain_ollama import OllamaLLM
 import re
 
@@ -119,10 +119,10 @@ for item in questions:
     print("\nDEBUG KEYWORDS:")
     print(keywords)
 
-    docs = db.similarity_search(
-        question,
-        k=5
-    )
+    docs = db.max_marginal_relevance_search(
+    question,
+    k=TOP_K
+)
 
 
     context = "\n\n".join(
@@ -134,13 +134,20 @@ for item in questions:
 
 
     prompt = f"""
-You are an AI research assistant.
+Answer the question using ONLY the provided context.
 
-Answer only using the context.
+Rules:
+- Extract all relevant information from the context.
+- If the answer asks for multiple items, return all items.
+- Do not return only one example.
+- Do not use outside knowledge.
+- If the answer is not available in the context, say:
+"I don't know based on the provided document."
+
+Be concise and accurate.
 
 Context:
 {context}
-
 
 Question:
 {question}
