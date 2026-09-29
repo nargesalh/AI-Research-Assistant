@@ -1,7 +1,19 @@
+import sys
+import os
+
+sys.path.append(
+    os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            ".."
+        )
+    )
+)
 import json
 
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from src.config import EMBEDDING_MODEL
 from langchain_ollama import OllamaLLM
 import re
 
@@ -65,7 +77,7 @@ with open(
 # -----------------------
 
 embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+    model_name=EMBEDDING_MODEL
 )
 
 
