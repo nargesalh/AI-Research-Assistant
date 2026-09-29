@@ -16,6 +16,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from src.config import EMBEDDING_MODEL, TOP_K
 from langchain_ollama import OllamaLLM
 import re
+from sentence_transformers import util
 
 
 def normalize(text):
@@ -102,7 +103,7 @@ llm = OllamaLLM(
     model="gemma2:2b"
 )
 
-
+total_semantic_score = 0
 total_score = 0
 total_possible = 0
 
@@ -156,6 +157,16 @@ Answer:
 
 
     answer = llm.invoke(prompt)
+    expected_answer = item["expected_answer"]
+
+    answer_embedding = embeddings.embed_query(answer)
+
+    expected_embedding = embeddings.embed_query(expected_answer)
+
+    semantic_score = util.cos_sim(
+        answer_embedding,
+        expected_embedding
+    ).item()
 
 
     print("\n==============================")
@@ -196,7 +207,11 @@ Answer:
         f"\nScore: {score}/{len(keywords)}"
     )
 
+    print(
+        f"Semantic Similarity: {semantic_score:.2f}"
+    )
 
+    total_semantic_score += semantic_score
     total_score += score
     total_possible += len(keywords)
 
@@ -211,4 +226,8 @@ print(
 
 print(
     f"Accuracy: {(total_score/total_possible)*100:.2f}%"
+)
+
+print(
+    f"Average Semantic Similarity: {total_semantic_score / len(questions):.2f}"
 )

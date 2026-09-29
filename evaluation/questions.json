@@ -2,6 +2,7 @@
   {
     "id":1,
     "question":"Which machine translation tasks were used to evaluate the Transformer?",
+    "expected_answer": "The Transformer was evaluated on the WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks.",
     "expected_keywords":[
       "WMT",
       "English-to-German",
@@ -12,6 +13,7 @@
   {
     "id":2,
     "question":"What is the main contribution of the paper?",
+    "expected_answer": "The main contribution of the paper is introducing the Transformer architecture, a sequence transduction model based solely on attention mechanisms without recurrence and convolutions.",
     "expected_keywords":[
       "Transformer",
       "attention",
@@ -23,11 +25,11 @@
   {
     "id":3,
     "question":"What are the main components used in multi-head attention?",
+    "expected_answer": "Multi-head attention uses multiple attention heads along with queries, keys, and values. Each head performs attention in parallel using projected queries, keys, and values.",
     "expected_keywords":[
       "query",
       "key",
-      "value",
-      "head"
+      "value"
     ]
   }
 ]
