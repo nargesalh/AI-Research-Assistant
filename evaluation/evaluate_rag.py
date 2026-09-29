@@ -10,7 +10,7 @@ sys.path.append(
     )
 )
 import json
-
+from nltk.stem import PorterStemmer
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from src.config import EMBEDDING_MODEL, TOP_K
@@ -49,13 +49,12 @@ def normalize(text):
         synonym_map.get(word, word)
         for word in words
     ]
+    stemmer = PorterStemmer()
 
     processed_words = []
 
     for word in words:
-        if len(word) > 3 and word.endswith("s"):
-            word = word[:-1]
-
+        word = stemmer.stem(word)
         processed_words.append(word)
 
     return " ".join(processed_words)
