@@ -1,7 +1,7 @@
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_ollama import OllamaLLM
-from config import TOP_K
+from config import TOP_K, EMBEDDING_MODEL
 
 
 # -----------------------
@@ -9,7 +9,7 @@ from config import TOP_K
 # -----------------------
 
 embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+    model_name=EMBEDDING_MODEL
 )
 
 
